@@ -11,6 +11,16 @@ import pl.lodz.budgetmanager.model.Receipt;
 public class ReceiptRepository {
     private List<Receipt> receipts = new ArrayList<>();
     private final List<Observer> observers = new ArrayList<>();
+    private static ReceiptRepository instance;
+
+    private ReceiptRepository() {}
+
+    synchronized public static ReceiptRepository getInstance() {
+        if (instance == null) {
+            instance = new ReceiptRepository();
+        }
+        return instance;
+    }
 
     public List<Receipt> getRepository() {
         return receipts;

@@ -19,11 +19,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         if (intent.hasExtra("Receipt")) {
-            TextView temporary = findViewById(R.id.temporary);
+            TextView receiptList = findViewById(R.id.output);
 
             Receipt receipt = (Receipt) intent.getSerializableExtra("Receipt");
-            temporary.setText(receipt.toString());
+            receiptList.setText(receipt.toString());
         }
+
+
     }
 
     public void addReceipt(View view) {

@@ -6,20 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import pl.lodz.budgetmanager.R;
-
-public class AddReceiptActivity extends AppCompatActivity {
+public class AddPurchaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_receipt);
-
-        Intent intent = getIntent();
+        setContentView(R.layout.activity_add_purchase);
     }
 
-    public void addProducts(View view) {
-        Intent intent = new Intent(this, AddPurchaseActivity.class);
+    public void addPurchase(View view) {
+    }
+
+    public void createReceipt(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

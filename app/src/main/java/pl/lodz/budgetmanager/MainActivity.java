@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import pl.lodz.budgetmanager.AddReceiptActivity;
 import pl.lodz.budgetmanager.R;
+import pl.lodz.budgetmanager.model.Receipt;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +17,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        if (intent.hasExtra("Receipt")) {
+            TextView temporary = findViewById(R.id.temporary);
+
+            Receipt receipt = (Receipt) intent.getSerializableExtra("Receipt");
+            temporary.setText(receipt.toString());
+        }
     }
 
     public void addReceipt(View view) {

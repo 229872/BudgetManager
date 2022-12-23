@@ -1,24 +1,23 @@
 package pl.lodz.budgetmanager.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Receipt {
-    private String shopName;
-    private List<String> tags;
+public class Receipt implements Serializable {
+    private final String shopName;
     private final List<Purchase> purchases;
     //dodac datę zakupu
     private final LocalDate purchaseDate;
     private final LocalDate addedDate;
 
-    public Receipt(String shopName, List<String> tags, List<Purchase> purchases, LocalDate purchaseDate) {
+    public Receipt(String shopName, List<Purchase> purchases, LocalDate purchaseDate) {
         if (shopName.length() == 0) {
             throw new IllegalArgumentException("Invalid shop name!");
         }
         this.shopName = shopName;
-        this.tags = tags;
         this.purchases = purchases;
         this.purchaseDate = purchaseDate;
         this.addedDate = LocalDate.now();
@@ -36,9 +35,6 @@ public class Receipt {
         return shopName;
     }
 
-    public List<String> getTags() {
-        return new ArrayList<>(tags);
-    }
 
     public List<Purchase> getPurchases() {
         return purchases;
@@ -59,14 +55,14 @@ public class Receipt {
         if (o == null || getClass() != o.getClass()) return false;
         Receipt receipt = (Receipt) o;
         return Objects.equals(shopName, receipt.shopName)
-                && Objects.equals(tags, receipt.tags) && Objects.equals(purchases, receipt.purchases)
+                && Objects.equals(purchases, receipt.purchases)
                 && Objects.equals(purchaseDate, receipt.purchaseDate)
                 && Objects.equals(addedDate, receipt.addedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shopName, tags, purchases, purchaseDate, addedDate);
+        return Objects.hash(shopName, purchases, purchaseDate, addedDate);
     }
 
     @Override
@@ -75,7 +71,7 @@ public class Receipt {
     }
 
     public String getInfo() {
-        return "Shop name: " + getShopName() + "\n" + "Tags: " + getTags().toString().replaceAll("[\\[\\]]", "")
+        return "Shop name: " + getShopName() + "\n"
                 + "\n" + "Purchases:\n    " +
                 getPurchases().toString().replaceAll("[\\[\\]]", "").replace(", ", "\n    ")
                 + "\n" + "Purchase date: " + getPurchaseDate() + "\n";

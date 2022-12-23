@@ -2,9 +2,10 @@ package pl.lodz.budgetmanager.model;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Purchase {
+public class Purchase implements Serializable {
     private final String name;
     private final double price;
     private final int quantity;

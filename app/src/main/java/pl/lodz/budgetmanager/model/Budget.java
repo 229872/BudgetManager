@@ -45,8 +45,8 @@ public class Budget implements Observer {
     public void update() {
         if (receiptRep.findAll(currentMonth) != null) {
             double current = 0;
-            for (var x : receiptRep.findAll(currentMonth)) {
-                current += x.getTotalPrice();
+            for (Receipt receipt : receiptRep.findAll(currentMonth)) {
+                current += receipt.getTotalPrice();
             }
             currentSpendings = current;
         } else {

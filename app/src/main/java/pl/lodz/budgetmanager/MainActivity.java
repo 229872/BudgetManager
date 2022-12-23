@@ -10,20 +10,19 @@ import android.widget.TextView;
 import pl.lodz.budgetmanager.AddReceiptActivity;
 import pl.lodz.budgetmanager.R;
 import pl.lodz.budgetmanager.model.Receipt;
+import pl.lodz.budgetmanager.repository.ReceiptRepository;
 
 public class MainActivity extends AppCompatActivity {
+    private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        if (intent.hasExtra("Receipt")) {
-            TextView receiptList = findViewById(R.id.output);
+        TextView receiptList = findViewById(R.id.output);
 
-            Receipt receipt = (Receipt) intent.getSerializableExtra("Receipt");
-            receiptList.setText(receipt.toString());
-        }
+        receiptList.setText(receiptRepository.getAll().toString());
 
 
     }

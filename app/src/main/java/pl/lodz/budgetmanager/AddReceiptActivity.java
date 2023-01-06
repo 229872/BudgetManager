@@ -37,7 +37,8 @@ public class AddReceiptActivity extends AppCompatActivity {
         shopNameInput.addTextChangedListener(textWatcher);
         calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener((calendarView, year, month, day) -> {
-            date = year + "/" + month + "/" + day;
+            date = year + "/" + (month < 10 ? "0" : "") + (month + 1) + "/" + day;
+            System.out.println("Log date: " + date);
         });
     }
 

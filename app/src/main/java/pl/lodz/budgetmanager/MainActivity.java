@@ -17,28 +17,31 @@ import pl.lodz.budgetmanager.repository.ReceiptRepository;
 
 public class MainActivity extends AppCompatActivity {
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
-    private final Budget budget = new Budget(receiptRepository);
+    private Budget budget = Budget.getInstance(receiptRepository);
     private TextView currentSpendingsLabel;
     private TextView budgetLabel;
     private TextView remainingSpendingsLabel;
+    private TextView budgetWarmingLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
+        System.out.println("Main budget: " + budget);
         TextView receiptList = findViewById(R.id.output);
 
         currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
         budgetLabel = findViewById(R.id.budgetLabel);
         remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
+        budgetWarmingLabel = findViewById(R.id.budgetWarmingLabel);
 
         System.out.println(receiptRepository.getAll().size());
 
 
         receiptList.setText(receiptRepository.getAll().toString());
         initBudgetLabels();
-
+        setBudgetWarmingLabel();
     }
 
     public void addReceipt(View view) {
@@ -54,6 +57,22 @@ public class MainActivity extends AppCompatActivity {
     public void editBudget(View view) {
         Intent intent = new Intent(this, EditBudgetActivity.class);
         startActivity(intent);
+    }
+
+    private void setBudgetWarmingLabel() {
+        double currentSpendings = Double.parseDouble(currentSpendingsLabel.getText().toString());
+
+        if (currentSpendings > budget.getMonthlyBudget()) {
+            budgetWarmingLabel.setText("Przekroczono budget");
+        } else if (currentSpendings == budget.getMonthlyBudget()) {
+            budgetWarmingLabel.setText("Osiagnieto budget");
+        } else if (currentSpendings > budget.getLimit()) {
+            budgetWarmingLabel.setText("Przekroczono limit");
+        } else if (currentSpendings == budget.getLimit()) {
+            budgetWarmingLabel.setText("Osiagnieto limit");
+        } else if (currentSpendings >= budget.getWarmingLimit()) {
+            budgetWarmingLabel.setText("Zblizasz sie do limitu");
+        }
     }
 
     private void setBudgetLabel() {

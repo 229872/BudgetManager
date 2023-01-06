@@ -73,16 +73,6 @@
         app:layout_constraintStart_toStartOf="@+id/budgetTitle"
         app:layout_constraintTop_toBottomOf="@+id/budgetTitle" />
 
-    <Button
-        android:id="@+id/sizeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
-        android:text="Increase size"
-        app:layout_constraintBottom_toBottomOf="@+id/button3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button3" />
-
     <TextView
         android:id="@+id/costTitle"
         android:layout_width="wrap_content"
@@ -105,6 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/costTitle" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="30dp"
@@ -148,5 +139,14 @@
         app:layout_constraintEnd_toEndOf="@+id/remainingMoneyTitle"
         app:layout_constraintStart_toStartOf="@+id/remainingMoneyTitle"
         app:layout_constraintTop_toBottomOf="@+id/remainingMoneyTitle" />
+
+    <TextView
+        android:id="@+id/budgetWarmingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button3"
+        app:layout_constraintTop_toTopOf="@+id/button3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package pl.lodz.budgetmanager.repository;
 
+import java.io.Serializable;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +9,7 @@ import java.util.List;
 import pl.lodz.budgetmanager.model.Observer;
 import pl.lodz.budgetmanager.model.Receipt;
 
-public class ReceiptRepository {
+public class ReceiptRepository implements Serializable {
     private List<Receipt> receipts = new ArrayList<>();
     private final List<Observer> observers = new ArrayList<>();
     private static ReceiptRepository instance;

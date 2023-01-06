@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private final Budget budget = new Budget(receiptRepository);
     private TextView currentSpendingsLabel;
     private TextView budgetLabel;
+    private TextView remainingSpendingsLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +28,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         TextView receiptList = findViewById(R.id.output);
+
         currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
         budgetLabel = findViewById(R.id.budgetLabel);
+        remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
+
         System.out.println(receiptRepository.getAll().size());
 
 
         receiptList.setText(receiptRepository.getAll().toString());
-        setBudgetLabel();
-        setCurrentSpendingsLabel();
+        initBudgetLabels();
 
     }
 
@@ -59,5 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setCurrentSpendingsLabel() {
         currentSpendingsLabel.setText(Double.toString(budget.getCurrentSpendings()));
+    }
+
+    private void setRemainingSpendingsLabel() {
+        remainingSpendingsLabel.setText(Double.toString(budget.getRemainingSpendings()));
+    }
+
+    private void initBudgetLabels() {
+        setBudgetLabel();
+        setCurrentSpendingsLabel();
+        setRemainingSpendingsLabel();
     }
 }

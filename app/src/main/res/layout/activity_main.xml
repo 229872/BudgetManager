@@ -34,8 +34,8 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="132dp"
         android:onClick="editBudget"
         android:text="Edit budget"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,9 +43,9 @@
 
     <TextView
         android:id="@+id/budgetTitle"
-        android:layout_width="118dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
         android:text="Budget:"
         android:textSize="17sp"
@@ -67,42 +67,30 @@
         android:id="@+id/budgetLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/budgetTitle"
         app:layout_constraintStart_toStartOf="@+id/budgetTitle"
         app:layout_constraintTop_toBottomOf="@+id/budgetTitle" />
 
     <Button
-        android:id="@+id/audioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
-        android:text="Audio"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/sizeButton" />
-
-    <Button
         android:id="@+id/sizeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="44dp"
         android:text="Increase size"
-        app:layout_constraintBottom_toTopOf="@+id/audioButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button3" />
 
     <TextView
         android:id="@+id/costTitle"
-        android:layout_width="66dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:text="Cost:"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/budgetTitle"
+        app:layout_constraintEnd_toStartOf="@+id/remainingMoneyTitle"
         app:layout_constraintStart_toEndOf="@+id/budgetTitle"
         app:layout_constraintTop_toTopOf="@+id/budgetTitle" />
 
@@ -110,13 +98,11 @@
         android:id="@+id/currentSpendingsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/costTitle"
-        app:layout_constraintStart_toEndOf="@+id/budgetTitle"
-        app:layout_constraintTop_toBottomOf="@+id/costTitle"
-        app:layout_constraintVertical_bias="0.307" />
+        app:layout_constraintStart_toStartOf="@+id/costTitle"
+        app:layout_constraintTop_toBottomOf="@+id/costTitle" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -124,7 +110,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -141,5 +127,26 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/remainingMoneyTitle"
+        android:layout_width="85dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="30dp"
+        android:text="Remaining:"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/costTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/costTitle" />
+
+    <TextView
+        android:id="@+id/remainingSpendingsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/remainingMoneyTitle"
+        app:layout_constraintStart_toStartOf="@+id/remainingMoneyTitle"
+        app:layout_constraintTop_toBottomOf="@+id/remainingMoneyTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

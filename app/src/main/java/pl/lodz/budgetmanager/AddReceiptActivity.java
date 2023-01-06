@@ -25,7 +25,7 @@ public class AddReceiptActivity extends AppCompatActivity {
     private Button button;
     private TextView shopNameInput;
     private CalendarView calendarView;
-    private String date;
+    private String date = LocalDate.now().toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,9 @@ public class AddReceiptActivity extends AppCompatActivity {
         shopNameInput = findViewById(R.id.shopNameInput);
         shopNameInput.addTextChangedListener(textWatcher);
         calendarView = findViewById(R.id.calendarView);
+
         calendarView.setOnDateChangeListener((calendarView, year, month, day) -> {
-            date = year + "/" + (month < 10 ? "0" : "") + (month + 1) + "/" + day;
-            System.out.println("Log date: " + date);
+            date = year + "-" + (month < 10 ? "0" : "") + (month + 1) + "-" + day;
         });
     }
 
@@ -46,10 +46,8 @@ public class AddReceiptActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddPurchaseActivity.class);
 
         String shopName = shopNameInput.getText().toString();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/d");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate purchaseDate = LocalDate.parse(date, formatter);
-        System.out.println(purchaseDate);
-
         intent.putExtra("ShopName", shopName);
         intent.putExtra("PurchaseDate", purchaseDate);
         startActivity(intent);

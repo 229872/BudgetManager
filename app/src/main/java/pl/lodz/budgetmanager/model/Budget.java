@@ -5,24 +5,19 @@ import java.time.Month;
 
 import pl.lodz.budgetmanager.repository.ReceiptRepository;
 
-public class Budget implements Observer {
-    private double currentSpendings;
+public class Budget {
     private double monthlyBudget;
-    private double remainingSpendings;
     private final ReceiptRepository receiptRep;
     private Month currentMonth;
 
     public Budget(ReceiptRepository receiptRep) {
         this.monthlyBudget = 0.0;
         this.receiptRep = receiptRep;
-        this.remainingSpendings = monthlyBudget;
-        this.currentSpendings = 0.0;
-        receiptRep.attach(this);
         updateMonth();
     }
 
     public double getCurrentSpendings() {
-        return currentSpendings;
+        return this.receiptRep.getTotalSpendings();
     }
 
     public double getMonthlyBudget() {
@@ -30,7 +25,7 @@ public class Budget implements Observer {
     }
 
     public double getRemainingSpendings() {
-        return remainingSpendings;
+        return this.monthlyBudget - getCurrentSpendings();
     }
 
     public void setMonthlyBudget(double monthlyBudget) {
@@ -41,17 +36,7 @@ public class Budget implements Observer {
         currentMonth = LocalDate.now().getMonth();
     }
 
-    @Override
-    public void update() {
-        if (receiptRep.findAll(currentMonth) != null) {
-            double current = 0;
-            for (Receipt receipt : receiptRep.findAll(currentMonth)) {
-                current += receipt.getTotalPrice();
-            }
-            currentSpendings = current;
-        } else {
-            currentSpendings = 0;
-        }
-        remainingSpendings = getMonthlyBudget() - getCurrentSpendings();
+    public Month getCurrentMonth() {
+        return currentMonth;
     }
 }

@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pl.lodz.budgetmanager.model.Observer;
 import pl.lodz.budgetmanager.model.Receipt;
 
 public class ReceiptRepository implements Serializable {
     private List<Receipt> receipts = new ArrayList<>();
-    private final List<Observer> observers = new ArrayList<>();
     private static ReceiptRepository instance;
 
     private ReceiptRepository() {}
@@ -28,15 +26,11 @@ public class ReceiptRepository implements Serializable {
     }
 
     public boolean add(Receipt r){
-        receipts.add(r);
-        notifyObservers();
-        return true;
+        return receipts.add(r);
     }
 
     public boolean remove(Receipt r) {
-        receipts.remove(r);
-        notifyObservers();
-        return true;
+        return receipts.remove(r);
     }
 
     public Receipt get(int index) {
@@ -99,19 +93,5 @@ public class ReceiptRepository implements Serializable {
             spendings += r.getTotalPrice();
         }
         return spendings;
-    }
-
-    public void attach(Observer o) {
-        observers.add(o);
-    }
-
-    public void detach(Observer o) {
-        observers.remove(o);
-    }
-
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update();
-        }
     }
 }

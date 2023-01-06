@@ -14,6 +14,7 @@ public class Budget {
         this.monthlyBudget = 0.0;
         this.receiptRep = receiptRep;
         updateMonth();
+        System.out.println("Budget month: " + currentMonth);
     }
 
     public double getCurrentSpendings() {

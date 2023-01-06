@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
     private final Budget budget = new Budget(receiptRepository);
     private TextView currentSpendingsLabel;
+    private TextView budgetLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         TextView receiptList = findViewById(R.id.output);
         currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
+        budgetLabel = findViewById(R.id.budgetLabel);
         System.out.println(receiptRepository.getAll().size());
 
 
         receiptList.setText(receiptRepository.getAll().toString());
-
+        setBudgetLabel();
+        setCurrentSpendingsLabel();
 
     }
 
@@ -48,5 +51,13 @@ public class MainActivity extends AppCompatActivity {
     public void editBudget(View view) {
         Intent intent = new Intent(this, EditBudgetActivity.class);
         startActivity(intent);
+    }
+
+    private void setBudgetLabel() {
+        budgetLabel.setText(Double.toString(budget.getMonthlyBudget()));
+    }
+
+    private void setCurrentSpendingsLabel() {
+        currentSpendingsLabel.setText(Double.toString(budget.getCurrentSpendings()));
     }
 }

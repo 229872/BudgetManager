@@ -25,18 +25,20 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout8"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -49,12 +51,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout9"
-        android:layout_width="175dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout8"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout8"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/filterMonth"
@@ -67,21 +69,34 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
         android:onClick="findByName"
         android:text="Find by name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout8" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
         android:onClick="findByMonth"
         android:text="Find by month"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout9"
+        app:layout_constraintEnd_toEndOf="@+id/button4"
+        app:layout_constraintStart_toStartOf="@+id/button4"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout9" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="157dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="back"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

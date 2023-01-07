@@ -2,6 +2,8 @@ package pl.lodz.budgetmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,13 +13,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.time.LocalDate;
 import java.util.List;
 
-import pl.lodz.budgetmanager.AddReceiptActivity;
-import pl.lodz.budgetmanager.R;
 import pl.lodz.budgetmanager.model.Budget;
 import pl.lodz.budgetmanager.model.Receipt;
 import pl.lodz.budgetmanager.repository.ReceiptRepository;
@@ -33,36 +31,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView budgetLabel;
     private TextView remainingSpendingsLabel;
     private TextView budgetWarmingLabel;
-    private Button deleteButton;
+    private Button findButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        receiptList = findViewById(R.id.output);
-        currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
-        budgetLabel = findViewById(R.id.budgetLabel);
-        remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
-        budgetWarmingLabel = findViewById(R.id.budgetWarmingLabel);
-        deleteButton = findViewById(R.id.deleteButton);
-        if (receiptRepository.getAll().size() == 0) {
-            deleteButton.setEnabled(false);
-        }
-
-        receipts = receiptRepository.findAll(LocalDate.now().getMonth());
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
-                receipts);
-        receiptList.setAdapter(adapter);
-        receiptList.setOnItemClickListener((parent, view, position, id) -> {
-            Receipt receipt = receipts.get(position);
-            receiptRepository.remove(receipt);
-            receipts.remove(receipt);
-            adapter.notifyDataSetChanged();
-            initBudgetLabels();
-        });
-
-
+        loadElements();
+        renderReceiptList();
         initBudgetLabels();
         setBudgetWarmingLabel();
     }
@@ -72,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void deleteReceipt(View view) {
-        Intent intent = new Intent(this, DeleteReceiptActivity.class);
+    public void findReceipt(View view) {
+        Intent intent = new Intent(this, FindReceiptActivity.class);
         startActivity(intent);
     }
 
@@ -123,6 +100,44 @@ public class MainActivity extends AppCompatActivity {
         setBudgetLabel();
         setCurrentSpendingsLabel();
         setRemainingSpendingsLabel();
+    }
+
+    private void loadElements() {
+        receiptList = findViewById(R.id.output);
+        currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
+        budgetLabel = findViewById(R.id.budgetLabel);
+        remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
+        budgetWarmingLabel = findViewById(R.id.budgetWarmingLabel);
+        findButton = findViewById(R.id.findButton);
+        if (receiptRepository.getAll().size() == 0) {
+            findButton.setEnabled(false);
+        }
+    }
+
+    private void renderReceiptList() {
+        receipts = receiptRepository.findAll(LocalDate.now().getMonth());
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
+                receipts);
+        receiptList.setAdapter(adapter);
+        receiptList.setOnItemLongClickListener((parent, view, position, id) -> {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setTitle("Are you sure?")
+                    .setMessage("Do you want to delete this item")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Receipt receipt = receipts.get(position);
+                            receiptRepository.remove(receipt);
+                            receipts.remove(receipt);
+                            adapter.notifyDataSetChanged();
+                            initBudgetLabels();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            return true;
+        });
     }
 
 }

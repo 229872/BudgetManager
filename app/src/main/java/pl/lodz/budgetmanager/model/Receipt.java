@@ -67,7 +67,7 @@ public class Receipt implements Serializable {
 
     @Override
     public String toString() {
-        return getShopName() + ", " + getPurchaseDate();
+        return getShopName() + ", " + getPurchaseDate() + ", " + getTotalPrice();
     }
 
     public String getInfo() {

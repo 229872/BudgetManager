@@ -32,7 +32,7 @@ public class Budget implements Serializable {
     }
 
     public double getCurrentSpendings() {
-        return this.receiptRep.getTotalSpendings();
+        return this.receiptRep.getSpendingsByMonth(LocalDate.now().getMonth());
     }
 
     public double getMonthlyBudget() {

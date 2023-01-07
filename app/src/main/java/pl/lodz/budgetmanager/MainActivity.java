@@ -6,10 +6,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import pl.lodz.budgetmanager.AddReceiptActivity;
 import pl.lodz.budgetmanager.R;
@@ -20,6 +25,10 @@ import pl.lodz.budgetmanager.repository.ReceiptRepository;
 public class MainActivity extends AppCompatActivity {
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
     private Budget budget = Budget.getInstance(receiptRepository);
+    private List<Receipt> receipts;
+    private ListView receiptList;
+    private ArrayAdapter<Receipt> adapter;
+
     private TextView currentSpendingsLabel;
     private TextView budgetLabel;
     private TextView remainingSpendingsLabel;
@@ -30,9 +39,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
-        TextView receiptList = findViewById(R.id.output);
 
+        receiptList = findViewById(R.id.output);
         currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
         budgetLabel = findViewById(R.id.budgetLabel);
         remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
@@ -42,7 +50,19 @@ public class MainActivity extends AppCompatActivity {
             deleteButton.setEnabled(false);
         }
 
-        receiptList.setText(receiptRepository.getAll().toString());
+        receipts = receiptRepository.findAll(LocalDate.now().getMonth());
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
+                receipts);
+        receiptList.setAdapter(adapter);
+        receiptList.setOnItemClickListener((parent, view, position, id) -> {
+            Receipt receipt = receipts.get(position);
+            receiptRepository.remove(receipt);
+            receipts.remove(receipt);
+            adapter.notifyDataSetChanged();
+            initBudgetLabels();
+        });
+
+
         initBudgetLabels();
         setBudgetWarmingLabel();
     }
@@ -104,4 +124,5 @@ public class MainActivity extends AppCompatActivity {
         setCurrentSpendingsLabel();
         setRemainingSpendingsLabel();
     }
+
 }

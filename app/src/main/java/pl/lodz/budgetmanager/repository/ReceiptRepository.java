@@ -66,11 +66,7 @@ public class ReceiptRepository implements Serializable {
                 found.add(r);
             }
         }
-        if (found.size() == 0) {
-            return null;
-        } else {
-            return found;
-        }
+        return found;
     }
 
     public List<Receipt> findAll(Month month) {
@@ -80,16 +76,21 @@ public class ReceiptRepository implements Serializable {
                 found.add(r);
             }
         }
-        if (found.size() == 0) {
-            return null;
-        } else {
-            return found;
-        }
+        return found;
     }
 
     public double getTotalSpendings() {
         double spendings = 0;
         for (Receipt r : receipts) {
+            spendings += r.getTotalPrice();
+        }
+        return spendings;
+    }
+
+    public double getSpendingsByMonth(Month month) {
+        List<Receipt> found = findAll(month);
+        double spendings = 0;
+        for (Receipt r : found) {
             spendings += r.getTotalPrice();
         }
         return spendings;

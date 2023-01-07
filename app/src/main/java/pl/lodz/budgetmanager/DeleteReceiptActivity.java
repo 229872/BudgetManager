@@ -34,7 +34,9 @@ public class DeleteReceiptActivity extends AppCompatActivity {
                 receipts);
         list.setAdapter(adapter);
         list.setOnItemClickListener((parent, view, position, id) -> {
-            receipts.remove(receipts.get(position));
+            Receipt receipt = receipts.get(position);
+            System.out.println(receiptRepository.remove(receipt) + " ref: " + receipt + " repoRef: " + receiptRepository.get(0));
+            receipts.remove(receipt);
             adapter.notifyDataSetChanged();
         });
     }

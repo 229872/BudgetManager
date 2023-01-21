@@ -93,6 +93,16 @@ public class ReceiptRepository implements Serializable {
         return new ArrayList<>(receipts);
     }
 
+    public List<Receipt> findAll(Category category) {
+        List<Receipt> found = new ArrayList<>();
+        for (Receipt r : receipts) {
+            if (r.getCategory().equals(category)) {
+                found.add(r);
+            }
+        }
+        return found;
+    }
+
     public double getTotalSpendings() {
         double spendings = 0;
         for (Receipt r : receipts) {

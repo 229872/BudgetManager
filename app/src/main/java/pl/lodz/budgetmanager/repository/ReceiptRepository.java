@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import pl.lodz.budgetmanager.model.Category;
 import pl.lodz.budgetmanager.model.Receipt;
 
 public class ReceiptRepository implements Serializable {
@@ -44,6 +45,15 @@ public class ReceiptRepository implements Serializable {
     public Receipt find(String shopName) {
         for (Receipt r : receipts) {
             if (r.getShopName().equals(shopName)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    public Receipt find(Category category) {
+        for (Receipt r : receipts) {
+            if (r.getCategory().equals(category)) {
                 return r;
             }
         }

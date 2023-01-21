@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">BudgetManager</string>
+    
+    <string-array name="categories">
+        <item>Food</item>
+        <item>Medicine</item>
+        <item>Cloth</item>
+        <item>Detergent</item>
+        <item>Accesory</item>
+        <item>Cosmetic</item>
+        <item>Other</item>
+    </string-array>
 </resources>

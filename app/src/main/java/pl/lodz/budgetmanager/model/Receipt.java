@@ -12,8 +12,9 @@ public class Receipt implements Serializable {
     //dodac datę zakupu
     private final LocalDate purchaseDate;
     private final LocalDate addedDate;
+    private final Category category;
 
-    public Receipt(String shopName, List<Purchase> purchases, LocalDate purchaseDate) {
+    public Receipt(String shopName, List<Purchase> purchases, LocalDate purchaseDate, Category category) {
         if (shopName.length() == 0) {
             throw new IllegalArgumentException("Invalid shop name!");
         }
@@ -21,6 +22,7 @@ public class Receipt implements Serializable {
         this.purchases = purchases;
         this.purchaseDate = purchaseDate;
         this.addedDate = LocalDate.now();
+        this.category = category;
     }
 
     public double getTotalPrice() {
@@ -49,6 +51,10 @@ public class Receipt implements Serializable {
         return addedDate;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,17 +63,18 @@ public class Receipt implements Serializable {
         return Objects.equals(shopName, receipt.shopName)
                 && Objects.equals(purchases, receipt.purchases)
                 && Objects.equals(purchaseDate, receipt.purchaseDate)
-                && Objects.equals(addedDate, receipt.addedDate);
+                && Objects.equals(addedDate, receipt.addedDate)
+                && Objects.equals(category, receipt.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shopName, purchases, purchaseDate, addedDate);
+        return Objects.hash(shopName, purchases, purchaseDate, addedDate, category);
     }
 
     @Override
     public String toString() {
-        return getShopName() + ", " + getPurchaseDate() + ", " + getTotalPrice();
+        return getShopName() + ", " + getPurchaseDate() + ", " + getTotalPrice() + ", " + getCategory();
     }
 
     public String getInfo() {

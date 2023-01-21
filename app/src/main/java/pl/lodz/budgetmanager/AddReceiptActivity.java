@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -18,14 +21,18 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import pl.lodz.budgetmanager.R;
+import pl.lodz.budgetmanager.model.Category;
 import pl.lodz.budgetmanager.model.Receipt;
 
-public class AddReceiptActivity extends AppCompatActivity {
+public class AddReceiptActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Button button;
     private TextView shopNameInput;
     private CalendarView calendarView;
     private String date = LocalDate.now().toString();
+    private ArrayAdapter<CharSequence> adapter;
+    private Spinner spinner;
+    private Category category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,12 @@ public class AddReceiptActivity extends AppCompatActivity {
         shopNameInput = findViewById(R.id.shopNameInput);
         shopNameInput.addTextChangedListener(textWatcher);
         calendarView = findViewById(R.id.calendarView);
+        spinner = findViewById(R.id.categoryInput);
+
+        adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         calendarView.setOnDateChangeListener((calendarView, year, month, day) -> {
             date = year + "-" + (month < 10 ? "0" : "") + (month + 1) + "-" + day;
@@ -46,10 +59,12 @@ public class AddReceiptActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddPurchaseActivity.class);
 
         String shopName = shopNameInput.getText().toString();
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
         LocalDate purchaseDate = LocalDate.parse(date, formatter);
         intent.putExtra("ShopName", shopName);
         intent.putExtra("PurchaseDate", purchaseDate);
+        intent.putExtra("Category", category);
         startActivity(intent);
     }
 
@@ -71,4 +86,14 @@ public class AddReceiptActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        category = Category.getFromString(parent.getItemAtPosition(position).toString());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -15,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.lodz.budgetmanager.model.Category;
 import pl.lodz.budgetmanager.model.Purchase;
 import pl.lodz.budgetmanager.model.Receipt;
 import pl.lodz.budgetmanager.repository.ReceiptRepository;
@@ -23,7 +28,9 @@ public class AddPurchaseActivity extends AppCompatActivity {
     private final ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
     private String shopName;
     private LocalDate purchaseDate;
+    private Category category;
     private List<Purchase> purchaseList = new ArrayList<>();
+
 
     private TextView purchaseListOutput;
     private TextInputEditText productNameInput;
@@ -31,7 +38,6 @@ public class AddPurchaseActivity extends AppCompatActivity {
     private TextInputEditText quantityInput;
     private TextView purchaseStatus;
     private Button doneButton;
-
 
 
     @Override
@@ -46,9 +52,11 @@ public class AddPurchaseActivity extends AppCompatActivity {
         doneButton = findViewById(R.id.doneButton);
         purchaseListOutput = findViewById(R.id.purchaseListOutput);
 
+
         Intent intent = getIntent();
         shopName = intent.getStringExtra("ShopName");
         purchaseDate = (LocalDate) intent.getSerializableExtra("PurchaseDate");
+        category = (Category) intent.getSerializableExtra("Category");
         purchaseStatus.setVisibility(View.INVISIBLE);
         doneButton.setEnabled(false);
     }
@@ -89,7 +97,7 @@ public class AddPurchaseActivity extends AppCompatActivity {
 
     public void createReceipt(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        Receipt receipt = new Receipt(shopName, purchaseList, purchaseDate);
+        Receipt receipt = new Receipt(shopName, purchaseList, purchaseDate, category);
         receiptRepository.add(receipt);
         startActivity(intent);
     }

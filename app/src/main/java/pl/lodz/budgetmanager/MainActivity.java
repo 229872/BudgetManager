@@ -63,23 +63,28 @@ public class MainActivity extends AppCompatActivity {
         double currentSpendings = Double.parseDouble(currentSpendingsLabel.getText().toString());
 
         if (budget.getMonthlyBudget() == 0) {
-            budgetWarmingLabel.setText("Nie ustawiono budgetu");
+            budgetWarmingLabel.setText("Budget not set");
             budgetWarmingLabel.setTextColor(Color.CYAN);
         } else if (currentSpendings > budget.getMonthlyBudget()) {
-            budgetWarmingLabel.setText("Przekroczono budget");
+            budgetWarmingLabel.setText("Budget exceeded");
             budgetWarmingLabel.setTextColor(Color.RED);
+            showBudgetExceededAlert();
         } else if (currentSpendings == budget.getMonthlyBudget()) {
-            budgetWarmingLabel.setText("Osiagnieto budget");
+            budgetWarmingLabel.setText("Budget reached");
             budgetWarmingLabel.setTextColor(Color.RED);
+            showBudgetReachedAlert();
         } else if (currentSpendings > budget.getLimit()) {
-            budgetWarmingLabel.setText("Przekroczono limit");
+            budgetWarmingLabel.setText("Limit exceeded");
             budgetWarmingLabel.setTextColor(Color.rgb(255,140,0));
+            showLimitExceededAlert();
         } else if (currentSpendings == budget.getLimit()) {
-            budgetWarmingLabel.setText("Osiagnieto limit");
+            budgetWarmingLabel.setText("Limit reached");
             budgetWarmingLabel.setTextColor(Color.YELLOW);
+            showLimitReachedAlert();
         } else if (currentSpendings >= budget.getWarmingLimit()) {
-            budgetWarmingLabel.setText("Zblizasz sie do limitu");
+            budgetWarmingLabel.setText("Close to the limit");
             budgetWarmingLabel.setTextColor(Color.CYAN);
+            showLimitWarmingAlert();
         }
 
     }
@@ -139,5 +144,52 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
+
+    private void showBudgetExceededAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setIcon(android.R.drawable.ic_delete)
+                .setTitle("Budget exceeeded")
+                .setMessage("Your budget has been exceed")
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .show();
+    }
+
+    private void showBudgetReachedAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setIcon(android.R.drawable.ic_delete)
+                .setTitle("Budget reached")
+                .setMessage("Your budget has been reached")
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .show();
+    }
+
+    private void showLimitExceededAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setIcon(android.R.drawable.ic_delete)
+                .setTitle("Limit exceeeded")
+                .setMessage("Your set limit has been exceeded")
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .show();
+    }
+
+    private void showLimitReachedAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Limit reached")
+                .setMessage("Your set limit has been reached")
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .show();
+    }
+
+    private void showLimitWarmingAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setTitle("Close to the limit")
+                .setMessage("You are close to exceed the limit")
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .show();
+    }
+
+
 
 }

@@ -2,6 +2,8 @@ package pl.lodz.budgetmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +43,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     private Button backButton;
 
     private boolean isFontHelper = false;
+    private final FindReceiptActivity pom = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +92,32 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
                 receipts);
         list.setAdapter(adapter);
-        list.setOnItemClickListener((parent, view, position, id) -> {
-            Receipt receipt = receipts.get(position);
-            receiptRepository.remove(receipt);
-            receipts.remove(receipt);
-            adapter.notifyDataSetChanged();
+        list.setOnItemLongClickListener((parent, view, position, id) -> {
+            new AlertDialog.Builder(FindReceiptActivity.this)
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setTitle("What you want to do ?")
+                    .setMessage("Click info for receipt info or delete to delete receipt")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Receipt receipt = receipts.get(position);
+                            receiptRepository.remove(receipt);
+                            receipts.remove(receipt);
+                            adapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton("Info", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Receipt receipt = receipts.get(position);
+                            Intent intent = new Intent(pom, ReceiptInfoActivity.class);
+                            intent.putExtra("ReceiptInfo", receipt);
+                            if (isFontHelper) intent.putExtra("Font", 20);
+                            startActivity(intent);
+                        }
+                    })
+                    .show();
+            return true;
         });
     }
 

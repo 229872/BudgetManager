@@ -31,12 +31,26 @@ public class MainActivity extends AppCompatActivity {
     private TextView budgetLabel;
     private TextView remainingSpendingsLabel;
     private TextView budgetWarmingLabel;
+
+    private TextView budgetTitle;
+    private TextView costTitle;
+    private TextView remainingMoneyTitle;
+    private TextView receiptsTitle;
     private Button findButton;
+    private Button editBudgetButton;
+    private Button addReceiptButton;
+    private Button fontButton;
+    private boolean isFontHelper = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        if (intent.hasExtra("Font")) {
+            changeFontSize(intent.getIntExtra("Font", 20));
+            isFontHelper = true;
+        }
 
         loadElements();
         renderReceiptList();
@@ -46,16 +60,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void addReceipt(View view) {
         Intent intent = new Intent(this, AddReceiptActivity.class);
+        if (isFontHelper) intent.putExtra("Font", 20);
         startActivity(intent);
     }
 
     public void findReceipt(View view) {
         Intent intent = new Intent(this, FindReceiptActivity.class);
+        if (isFontHelper) intent.putExtra("Font", 20);
         startActivity(intent);
     }
 
     public void editBudget(View view) {
         Intent intent = new Intent(this, EditBudgetActivity.class);
+        if (isFontHelper) intent.putExtra("Font", 20);
         startActivity(intent);
     }
 
@@ -114,6 +131,14 @@ public class MainActivity extends AppCompatActivity {
         remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
         budgetWarmingLabel = findViewById(R.id.budgetWarmingLabel);
         findButton = findViewById(R.id.findButton);
+        receiptsTitle = findViewById(R.id.receiptsTitle);
+        budgetTitle = findViewById(R.id.budgetTitle);
+        costTitle = findViewById(R.id.costTitle);
+        remainingMoneyTitle = findViewById(R.id.remainingMoneyTitle);
+        editBudgetButton = findViewById(R.id.editBudgetButton);
+        addReceiptButton = findViewById(R.id.addReceiptButton);
+        fontButton = findViewById(R.id.fontButton);
+
         if (receiptRepository.getAll().size() == 0) {
             findButton.setEnabled(false);
         }
@@ -191,5 +216,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void increaseFontSize(View view) {
+        changeFontSize(20);
+        isFontHelper = true;
+    }
 
+    private void changeFontSize(int newFontSize) {
+        currentSpendingsLabel.setTextSize(newFontSize);
+        remainingSpendingsLabel.setTextSize(newFontSize);
+        budgetLabel.setTextSize(newFontSize);
+        remainingMoneyTitle.setTextSize(newFontSize);
+        costTitle.setTextSize(newFontSize);
+        budgetTitle.setTextSize(newFontSize);
+        budgetWarmingLabel.setTextSize(newFontSize);
+        findButton.setTextSize(newFontSize);
+        receiptsTitle.setTextSize(newFontSize);
+        addReceiptButton.setTextSize(newFontSize);
+        fontButton.setTextSize(newFontSize);
+        editBudgetButton.setTextSize(newFontSize);
+    }
 }

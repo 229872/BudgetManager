@@ -82,7 +82,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot doc : task.getResult()) {
                             System.out.println(doc.getId() + " => " + doc.getData());
-                            receipts.add(mapToReceipt(doc.getData()));
+                            receipts.add(mapToReceipt(doc.getId(), doc.getData()));
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -117,7 +117,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot doc : task.getResult()) {
                             System.out.println(doc.getId() + " => " + doc.getData());
-                            receipts.add(mapToReceipt(doc.getData()));
+                            receipts.add(mapToReceipt(doc.getId(), doc.getData()));
                         }
                         adapter.notifyDataSetChanged();
                     }

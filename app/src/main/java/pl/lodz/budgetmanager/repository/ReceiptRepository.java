@@ -2,40 +2,22 @@ package pl.lodz.budgetmanager.repository;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Context;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import pl.lodz.budgetmanager.model.Category;
 import pl.lodz.budgetmanager.model.Purchase;
@@ -76,9 +58,9 @@ public class ReceiptRepository implements Serializable {
         return receipt;
     }
 
-    public static Receipt mapToReceipt(Map<String, Object> map) {
+    public static Receipt mapToReceipt(String id, Map<String, Object> map) {
         String shopName = (String) map.get("shopName");
-        LocalDate purchaseDate = LocalDate.parse((String)map.get("purchaseDate"));
+        LocalDate purchaseDate = LocalDate.parse((String) map.get("purchaseDate"));
         List<Purchase> purchases = new ArrayList<>();
         Category category;
         try {
@@ -87,18 +69,22 @@ public class ReceiptRepository implements Serializable {
             category = Category.OTHER;
         }
 
-        return new Receipt(shopName, purchases, purchaseDate, category);
+        return new Receipt(id, shopName, purchases, purchaseDate, category);
     }
 
-    public boolean add(Receipt r){
+    public void add(Receipt r) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(collectionName)
                 .add(receiptToMap(r))
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    documentReference
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                Receipt receipt = mapToReceipt(
+                                        documentReference.getId(), task.getResult().getData()); // hope this does not crash anytime soon
+                                receipts.add(receipt);
+                            });
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -107,11 +93,15 @@ public class ReceiptRepository implements Serializable {
                     }
                 });
 
-        return receipts.add(r);
+        receipts.add(r);
     }
 
-    public boolean remove(Receipt r) {
-        return receipts.remove(r);
+    public void remove(Receipt r) {
+        receipts.remove(r);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("receipts")
+                .document(r.getId())
+                .delete();
     }
 
     public Receipt get(int index) {
@@ -148,7 +138,7 @@ public class ReceiptRepository implements Serializable {
     public List<Receipt> findAll(String shopName) {
         List<Receipt> found = new ArrayList<>();
         for (Receipt r : receipts) {
-            if ( r.getShopName().equals(shopName)) {
+            if (r.getShopName().equals(shopName)) {
                 found.add(r);
             }
         }
@@ -158,7 +148,7 @@ public class ReceiptRepository implements Serializable {
     public List<Receipt> findAll(Month month) {
         List<Receipt> found = new ArrayList<>();
         for (Receipt r : receipts) {
-            if ( r.getPurchaseDate().getMonth().equals(month)) {
+            if (r.getPurchaseDate().getMonth().equals(month)) {
                 found.add(r);
             }
         }
@@ -174,7 +164,7 @@ public class ReceiptRepository implements Serializable {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d(TAG, document.getId() + " => " + document.getData());
-                            receipts.add(mapToReceipt(document.getData()));
+                            receipts.add(mapToReceipt(document.getId(), document.getData()));
                         }
                     } else {
                         Log.w(TAG, "Error getting documents.", task.getException());

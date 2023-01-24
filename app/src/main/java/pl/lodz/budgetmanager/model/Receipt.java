@@ -1,5 +1,7 @@
 package pl.lodz.budgetmanager.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Receipt implements Serializable {
+    private String id;
+
     private final String shopName;
     private final List<Purchase> purchases;
     //dodac datę zakupu
@@ -23,6 +27,11 @@ public class Receipt implements Serializable {
         this.purchaseDate = purchaseDate;
         this.addedDate = LocalDate.now();
         this.category = category;
+    }
+
+    public Receipt(String id, String shopName, List<Purchase> purchases, LocalDate purchaseDate, Category category) {
+        this(shopName, purchases, purchaseDate, category);
+        this.id = id;
     }
 
     public double getTotalPrice() {
@@ -72,6 +81,7 @@ public class Receipt implements Serializable {
         return Objects.hash(shopName, purchases, purchaseDate, addedDate, category);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return getShopName() + ", " + getPurchaseDate() + ", " + getTotalPrice() + ", " + getCategory();
@@ -82,5 +92,13 @@ public class Receipt implements Serializable {
                 + "\n" + "Purchases:\n    " +
                 getPurchases().toString().replaceAll("[\\[\\]]", "").replace(", ", "\n    ")
                 + "\n" + "Purchase date: " + getPurchaseDate() + "\n";
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

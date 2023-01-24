@@ -2,8 +2,6 @@ package pl.lodz.budgetmanager;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             showBudgetReachedAlert();
         } else if (currentSpendings > budget.getLimit()) {
             budgetWarmingLabel.setText("Limit exceeded");
-            budgetWarmingLabel.setTextColor(Color.rgb(255,140,0));
+            budgetWarmingLabel.setTextColor(Color.rgb(255, 140, 0));
             showLimitExceededAlert();
         } else if (currentSpendings == budget.getLimit()) {
             budgetWarmingLabel.setText("Limit reached");
@@ -117,14 +118,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Receipt mapToReceipt(Map<String, Object> map) {
+    private Receipt mapToReceipt(String id, Map<String, Object> map) {
         String shopName = (String) map.get("shopName");
-        LocalDate purchaseDate = LocalDate.parse((String)map.get("purchaseDate"));
+        LocalDate purchaseDate = LocalDate.parse((String) map.get("purchaseDate"));
         List<Purchase> purchases = new ArrayList<>();
-        System.out.println((String)map.get("category"));
-        Category category = Category.getFromString((String)map.get("category"));
+        Category category = Category.getFromString((String) map.get("category"));
 
-        return new Receipt(shopName, purchases, purchaseDate, category);
+        return new Receipt(id, shopName, purchases, purchaseDate, category);
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -145,10 +145,11 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Log.d(TAG, document.getId() + " => " + document.getData());
-                            if (LocalDate.parse((String)document.getData().get("purchaseDate"),
-                                    DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                                    .getMonth().equals(LocalDate.now().getMonth()))
-                            receipts.add(mapToReceipt(document.getData()));
+                            if (LocalDate.parse((String) document.getData().get("purchaseDate"),
+                                            DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                                    .getMonth().equals(LocalDate.now().getMonth())) {
+                                receipts.add(mapToReceipt(document.getId(), document.getData()));
+                            }
                         }
 
                         if (receipts.size() == 0) {
@@ -191,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle("Budget exceeeded")
                 .setMessage("Your budget has been exceed")
-                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {
+                })
                 .show();
     }
 
@@ -200,7 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle("Budget reached")
                 .setMessage("Your budget has been reached")
-                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {
+                })
                 .show();
     }
 
@@ -209,7 +212,8 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle("Limit exceeeded")
                 .setMessage("Your set limit has been exceeded")
-                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {
+                })
                 .show();
     }
 
@@ -218,7 +222,8 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Limit reached")
                 .setMessage("Your set limit has been reached")
-                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {
+                })
                 .show();
     }
 
@@ -227,10 +232,10 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle("Close to the limit")
                 .setMessage("You are close to exceed the limit")
-                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {} )
+                .setPositiveButton("Ok", (DialogInterface dialog, int which) -> {
+                })
                 .show();
     }
-
 
 
 }

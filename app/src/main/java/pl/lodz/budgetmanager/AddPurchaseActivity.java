@@ -49,16 +49,20 @@ public class AddPurchaseActivity extends AppCompatActivity {
     private TextInputEditText priceInput;
     private TextInputEditText quantityInput;
     private TextView purchaseStatus;
-    private Button doneButton;
+    private Button addButton;
+    private Button addWithPhotoButton;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private Button addPurchaseButton;
     private TextView purchaseTitle;
+
+    private String deviceId;
 
 
     @SuppressLint("HardwareIds")
     @Override
     protected void onStart() {
         super.onStart();
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     // Callback is invoked after the user selects a media item or closes the
@@ -67,7 +71,6 @@ public class AddPurchaseActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         Intent intent = new Intent(this, MainActivity.class);
                         Receipt receipt = new Receipt(shopName, purchaseList, purchaseDate, category);
-                        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference storageRef = storage.getReference();
@@ -119,7 +122,8 @@ public class AddPurchaseActivity extends AppCompatActivity {
         priceInput.setTextSize(newFontSize);
         quantityInput.setTextSize(newFontSize);
         addPurchaseButton.setTextSize(newFontSize);
-        doneButton.setTextSize(newFontSize);
+        addButton.setTextSize(newFontSize);
+        addWithPhotoButton.setTextSize(newFontSize);
         purchaseStatus.setTextSize(newFontSize);
 
     }
@@ -133,7 +137,8 @@ public class AddPurchaseActivity extends AppCompatActivity {
         priceInput = findViewById(R.id.priceInput);
         quantityInput = findViewById(R.id.quantityInput);
         purchaseStatus = findViewById(R.id.purchaseStatus);
-        doneButton = findViewById(R.id.doneButton);
+        addButton = findViewById(R.id.addButton);
+        addWithPhotoButton = findViewById(R.id.addWithPhotoButton);
         purchaseListOutput = findViewById(R.id.purchaseListOutput);
         addPurchaseButton = findViewById(R.id.addPurchaseButton);
         purchaseTitle = findViewById(R.id.purchaseTitle);
@@ -145,7 +150,8 @@ public class AddPurchaseActivity extends AppCompatActivity {
         purchaseDate = (LocalDate) intent.getSerializableExtra("PurchaseDate");
         category = (Category) intent.getSerializableExtra("Category");
         purchaseStatus.setVisibility(View.INVISIBLE);
-        doneButton.setEnabled(false);
+        addWithPhotoButton.setEnabled(false);
+        addButton.setEnabled(false);
 
         if (intent.hasExtra("Font")) {
             changeFontSize(intent.getIntExtra("Font", 20));
@@ -171,7 +177,8 @@ public class AddPurchaseActivity extends AppCompatActivity {
                     purchaseStatus.setVisibility(View.INVISIBLE);
                 }
             }, 3000);
-            doneButton.setEnabled(true);
+            addWithPhotoButton.setEnabled(true);
+            addButton.setEnabled(true);
             purchaseListOutput.setText(purchaseList.toString());
 
         } catch (Exception e) {
@@ -190,7 +197,7 @@ public class AddPurchaseActivity extends AppCompatActivity {
     }
 
     @SuppressLint("HardwareIds")
-    public void createReceipt(View view) {
+    public void addWithPhoto(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         if (isFontHelper) intent.putExtra("Font", 20);
         // Launch the photo picker and allow the user to choose only images.
@@ -198,4 +205,25 @@ public class AddPurchaseActivity extends AppCompatActivity {
                 .setMediaType((ActivityResultContracts.PickVisualMedia.VisualMediaType) ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
     }
+
+    public void add(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        if (isFontHelper) intent.putExtra("Font", 20);
+        Receipt receipt = new Receipt(shopName, purchaseList, purchaseDate, category);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("receipts")
+                .add(receiptToMap(receipt, deviceId))
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    startActivity(intent);
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+
 }

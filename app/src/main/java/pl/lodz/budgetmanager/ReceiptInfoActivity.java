@@ -19,7 +19,7 @@ public class ReceiptInfoActivity extends AppCompatActivity {
 
     private TextView receiptInfoTitle;
     private TextView receiptObject;
-    private Button infoBackButton;
+    private Button showPhotoButton;
     private ListView purchasesList;
     private ArrayAdapter<Purchase> adapter;
     private List<Purchase> purchases;
@@ -50,18 +50,16 @@ public class ReceiptInfoActivity extends AppCompatActivity {
         purchasesList = findViewById(R.id.purchasesList);
         receiptInfoTitle = findViewById(R.id.receiptInfoTitle);
         receiptObject = findViewById(R.id.receiptObject);
-        infoBackButton = findViewById(R.id.infoBackButton);
+        showPhotoButton = findViewById(R.id.showPhotoButton);
     }
 
     private void changeFontSize(int font) {
         receiptInfoTitle.setTextSize(font);
         receiptObject.setTextSize(font);
-        infoBackButton.setTextSize(font);
+        showPhotoButton.setTextSize(font);
     }
 
-    public void back(View view) {
-        Intent intent = new Intent(this, FindReceiptActivity.class);
-        if (isFontHelper) intent.putExtra("Font", 20);
-        startActivity(intent);
+    public void displayPhoto(View view) {
+       // TODO photo
     }
 }

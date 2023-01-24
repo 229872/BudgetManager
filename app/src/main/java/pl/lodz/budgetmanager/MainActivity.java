@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -32,8 +33,9 @@ import pl.lodz.budgetmanager.model.Receipt;
 import pl.lodz.budgetmanager.repository.ReceiptRepository;
 
 public class MainActivity extends AppCompatActivity {
+    private String deviceId;
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
-    private Budget budget = Budget.getInstance(receiptRepository);
+    private Budget budget;
     private List<Receipt> receipts;
     private ListView receiptList;
     private ArrayAdapter<Receipt> adapter;
@@ -48,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        budget = Budget.getInstance(receiptRepository, deviceId);
 
         render();
 
@@ -99,7 +104,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBudgetLabel() {
-        budgetLabel.setText(String.format("%.2f", budget.getMonthlyBudget()));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("budgets")
+                .document(deviceId)
+                .get()
+                .addOnCompleteListener(docRef -> {
+                    DocumentSnapshot docSnapshot = docRef.getResult();
+                    if (docSnapshot.exists()) {
+                        budgetLabel.setText(String.format("%.2f", docSnapshot.get("monthlyBudget")));
+                    }
+                });
     }
 
     private void setCurrentSpendingsLabel() {
@@ -129,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("receipts")
-                .whereEqualTo("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+                .whereEqualTo("deviceId", deviceId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -142,12 +156,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
-                        setRemainingSpendingsLabel();
-                        setCurrentSpendingsLabel();
-
                         if (receipts.size() == 0) {
                             findButton.setEnabled(false);
                         }
+
+                        receiptRepository.setReceipts(receipts);
 
                         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
                                 receipts);

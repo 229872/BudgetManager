@@ -138,4 +138,9 @@ public class ReceiptRepository implements Serializable {
         }
         return spendings;
     }
+
+    public void setReceipts(List<Receipt> receiptList) {
+        this.receipts.clear();
+        this.receipts.addAll(receiptList);
+    }
 }

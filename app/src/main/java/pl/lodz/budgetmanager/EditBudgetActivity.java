@@ -1,13 +1,14 @@
 package pl.lodz.budgetmanager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -16,7 +17,7 @@ import pl.lodz.budgetmanager.model.Budget;
 import pl.lodz.budgetmanager.repository.ReceiptRepository;
 
 public class EditBudgetActivity extends AppCompatActivity {
-
+    private String deviceId;
     private TextInputEditText budgetInput;
     private TextInputEditText limitInput;
     private TextInputEditText warmingInput;
@@ -28,13 +29,17 @@ public class EditBudgetActivity extends AppCompatActivity {
 
     private Button budgetButton;
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
-    private Budget budget = Budget.getInstance(receiptRepository);
+    private Budget budget;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("Edit budget: " + budget);
+
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        budget = Budget.getInstance(receiptRepository, deviceId);
+
         setContentView(R.layout.activity_edit_budget);
         loadElements();
         loadValues();

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "213388838456",
+    "project_id": "budgetmanager-fde1d",
+    "storage_bucket": "budgetmanager-fde1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213388838456:android:e50ed9fda01e5e672648cd",
+        "android_client_info": {
+          "package_name": "pl.lodz.budgetmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213388838456-b1tnuvg7mbqfo0f484a3pa2jpjq7hkjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBid-0XFoye7leJeAiV7hKFyQIqIl7u8wE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213388838456-b1tnuvg7mbqfo0f484a3pa2jpjq7hkjs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

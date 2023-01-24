@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         remainingSpendingsLabel = findViewById(R.id.remainingSpendingsLabel);
         budgetWarmingLabel = findViewById(R.id.budgetWarmingLabel);
         findButton = findViewById(R.id.findButton);
-        if (receiptRepository.getAll().size() == 0) {
+        if (receiptRepository.findAll().size() == 0) {
             findButton.setEnabled(false);
         }
     }

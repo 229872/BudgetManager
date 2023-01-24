@@ -1,14 +1,11 @@
 package pl.lodz.budgetmanager.model;
 
 import java.util.Arrays;
-import java.util.Optional;
-
-import pl.lodz.budgetmanager.exceptions.WrongValueException;
 
 public enum Category {
     FOOD("Food"), MEDICINE("Medicine"),
     CLOTH("Cloth"), DETERGENT("Detergent"),
-    ACCESORY("Accessory"), COSMETIC("Cosmetic"),
+    ACCESSORY("Accessory"), COSMETIC("Cosmetic"),
     OTHER("Other");
 
     private String cateGoryName;

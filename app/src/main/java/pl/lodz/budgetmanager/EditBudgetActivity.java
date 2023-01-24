@@ -25,6 +25,11 @@ public class EditBudgetActivity extends AppCompatActivity {
     private TextView limitInfoLabel;
     private TextView warmingInfoLabel;
     private TextView monthLabel;
+    private TextView editBudgetTitle;
+    private TextView infoTitle;
+    private TextView budgetInfoTitle;
+    private TextView liminitInfoTitle;
+    private TextView warminTitle;
 
     private Button budgetButton;
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
@@ -35,10 +40,34 @@ public class EditBudgetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+
         System.out.println("Edit budget: " + budget);
         setContentView(R.layout.activity_edit_budget);
         loadElements();
         loadValues();
+
+        if (intent.hasExtra("Font")) {
+            changeFontSize(intent.getIntExtra("Font", 20));
+            isFontHelper = true;
+        }
+    }
+
+    private void changeFontSize(int newFontSize) {
+        editBudgetTitle.setTextSize(newFontSize);
+        monthLabel.setTextSize(newFontSize);
+        budgetInput.setTextSize(newFontSize);
+        limitInput.setTextSize(newFontSize);
+        warmingInput.setTextSize(newFontSize);
+        budgetButton.setTextSize(newFontSize);
+        infoTitle.setTextSize(newFontSize);
+        warminTitle.setTextSize(newFontSize);
+        budgetInfoTitle.setTextSize(newFontSize);
+        liminitInfoTitle.setTextSize(newFontSize);
+        warminTitle.setTextSize(newFontSize);
+        budgetInfoLabel.setTextSize(newFontSize);
+        limitInfoLabel.setTextSize(newFontSize);
+        warmingInfoLabel.setTextSize(newFontSize);
     }
 
     private void loadElements() {
@@ -51,6 +80,11 @@ public class EditBudgetActivity extends AppCompatActivity {
         limitInfoLabel = findViewById(R.id.limitInfoLabel);
         warmingInfoLabel = findViewById(R.id.warmingInfoLabel);
         monthLabel = findViewById(R.id.monthLabel);
+        editBudgetTitle = findViewById(R.id.editBudgetTitle);
+        infoTitle = findViewById(R.id.infoTitle);
+        budgetInfoTitle = findViewById(R.id.budgetInfoTitle);
+        liminitInfoTitle = findViewById(R.id.liminitInfoTitle);
+        warminTitle = findViewById(R.id.warminTitle);
     }
 
     private void loadValues() {
@@ -86,6 +120,7 @@ public class EditBudgetActivity extends AppCompatActivity {
             budget.setWarmingLimit(newWarmingLimit);
 
             Intent intent = new Intent(this, MainActivity.class);
+            if (isFontHelper) intent.putExtra("Font", 20);
             startActivity(intent);
         } catch (WrongValueException e) {
             errorLabel.setText(e.getMessage());

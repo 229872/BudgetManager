@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -31,15 +33,38 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     private ArrayAdapter<Receipt> adapter;
     private ArrayAdapter<CharSequence> categoryAdapter;
     private Category category;
+
+    private TextView findReceiptTitle;
+    private Button findByNameButton;
+    private Button findByMonthButton;
+    private Button findGenreButton;
+    private Button backButton;
+
     private boolean isFontHelper = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_receipt);
+        Intent intent = getIntent();
 
         loadElements();
         renderList();
+
+        if (intent.hasExtra("Font")) {
+            changeFontSize(intent.getIntExtra("Font", 20));
+            isFontHelper = true;
+        }
+    }
+
+    private void changeFontSize(int newFontSize) {
+        findReceiptTitle.setTextSize(newFontSize);
+        filterName.setTextSize(newFontSize);
+        filterMonth.setTextSize(newFontSize);
+        findByNameButton.setTextSize(newFontSize - 6);
+        findByMonthButton.setTextSize(newFontSize - 6);
+        findGenreButton.setTextSize(newFontSize - 6);
+        backButton.setTextSize(newFontSize);
     }
 
     private void loadElements() {
@@ -47,6 +72,11 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
         filterName = findViewById(R.id.filterName);
         filterMonth = findViewById(R.id.filterMonth);
         spinner = findViewById(R.id.spinner);
+        findReceiptTitle = findViewById(R.id.findReceiptTitle);
+        findByNameButton = findViewById(R.id.findByNameButton);
+        findByMonthButton = findViewById(R.id.findByMonthButton);
+        findGenreButton = findViewById(R.id.findGenreButton);
+        backButton = findViewById(R.id.backButton);
 
         categoryAdapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -100,6 +130,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
 
     public void back(View view) {
         Intent intent = new Intent(this, MainActivity.class);
+        if (isFontHelper) intent.putExtra("Font", 20);
         startActivity(intent);
     }
 

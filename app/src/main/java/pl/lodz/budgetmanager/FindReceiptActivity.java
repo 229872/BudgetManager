@@ -2,8 +2,10 @@ package pl.lodz.budgetmanager;
 
 import static pl.lodz.budgetmanager.repository.ReceiptRepository.mapToReceipt;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,11 +74,13 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
         });
     }
 
+    @SuppressLint("HardwareIds")
     public void findByName(View view) {
         String name = filterName.getText().toString();
         receipts.clear();
         db.collection("receipts")
                 .whereEqualTo("shopName", name)
+                .whereEqualTo("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -105,6 +109,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
         adapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("HardwareIds")
     public void findByCategory(View view) {
         // FIXME finding with ACCESSORY selected crashes the app
         String categoryName = category.name();
@@ -112,6 +117,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
         receipts.clear();
         db.collection("receipts")
                 .whereEqualTo("category", categoryName)
+                .whereEqualTo("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

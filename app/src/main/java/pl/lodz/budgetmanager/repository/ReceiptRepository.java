@@ -41,7 +41,7 @@ public class ReceiptRepository implements Serializable {
         return receipts;
     }
 
-    public static Map<String, Object> receiptToMap(Receipt r) {
+    public static Map<String, Object> receiptToMap(Receipt r, String deviceId) {
         Map<String, Object> receipt = new HashMap<>();
         receipt.put("shopName", r.getShopName());
         receipt.put("addedDate", r.getAddedDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -49,12 +49,8 @@ public class ReceiptRepository implements Serializable {
         receipt.put("category", r.getCategory());
         receipt.put("purchases", r.getPurchases());
         receipt.put("totalPrice", r.getTotalPrice());
-//        try {
-//            receipt.put("userId", AdvertisingIdClient.getAdvertisingIdInfo(context).getId());
-//        } catch (IOException | GooglePlayServicesNotAvailableException |
-//                 GooglePlayServicesRepairableException e) {
-//            throw new RuntimeException(e);
-//        }
+        receipt.put("deviceId", deviceId);
+
         return receipt;
     }
 
@@ -72,10 +68,10 @@ public class ReceiptRepository implements Serializable {
         return new Receipt(id, shopName, purchases, purchaseDate, category);
     }
 
-    public void add(Receipt r) {
+    public void add(Receipt r, String deviceId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(collectionName)
-                .add(receiptToMap(r))
+                .add(receiptToMap(r, deviceId))
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                     documentReference

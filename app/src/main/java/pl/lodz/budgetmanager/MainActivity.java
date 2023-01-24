@@ -99,15 +99,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setBudgetLabel() {
-        budgetLabel.setText(Double.toString(budget.getMonthlyBudget()));
+        budgetLabel.setText(String.format("%.2f", budget.getMonthlyBudget()));
     }
 
     private void setCurrentSpendingsLabel() {
-        currentSpendingsLabel.setText(Double.toString(budget.getCurrentSpendings()));
+        currentSpendingsLabel.setText(String.format("%.2f", budget.getCurrentSpendings()));
     }
 
     private void setRemainingSpendingsLabel() {
-        remainingSpendingsLabel.setText(Double.toString(budget.getRemainingSpendings()));
+        remainingSpendingsLabel.setText(String.format("%.2f", budget.getRemainingSpendings()));
     }
 
     private void initBudgetLabels() {
@@ -141,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                                 receipts.add(mapToReceipt(document.getId(), document.getData()));
                             }
                         }
+
+                        setRemainingSpendingsLabel();
+                        setCurrentSpendingsLabel();
 
                         if (receipts.size() == 0) {
                             findButton.setEnabled(false);

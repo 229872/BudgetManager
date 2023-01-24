@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +35,7 @@ public class Receipt implements Serializable {
 
     public double getTotalPrice() {
         double totalPrice = 0;
-        for (Purchase p: getPurchases()) {
+        for (Purchase p : getPurchases()) {
             totalPrice += p.getTotalPurchaseValue();
         }
         return totalPrice;
@@ -84,7 +83,8 @@ public class Receipt implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return getShopName() + ", " + getPurchaseDate() + ", " + getTotalPrice() + ", " + getCategory();
+        return String.format("%s, %s, %.2f, %s", shopName, purchaseDate.toString(), getTotalPrice(), category.toString());
+        // return shopName + ", " + purchaseDate + ", " + getTotalPrice() + ", " + category;
     }
 
     public String getInfo() {

@@ -60,17 +60,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-
-        render();
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        budget = Budget.getInstance(receiptRepository, deviceId);
 
         if (intent.hasExtra("Font")) {
             changeFontSize(intent.getIntExtra("Font", 20));
             isFontHelper = true;
         }
-        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        budget = Budget.getInstance(receiptRepository, deviceId);
 
 
+        render();
 
     }
 

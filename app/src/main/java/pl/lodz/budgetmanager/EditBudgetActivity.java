@@ -29,6 +29,7 @@ public class EditBudgetActivity extends AppCompatActivity {
     private Button budgetButton;
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
     private Budget budget = Budget.getInstance(receiptRepository);
+    private boolean isFontHelper = false;
 
 
     @Override

@@ -31,6 +31,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     private ArrayAdapter<Receipt> adapter;
     private ArrayAdapter<CharSequence> categoryAdapter;
     private Category category;
+    private boolean isFontHelper = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -47,20 +47,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        if (intent.hasExtra("Font")) {
-            changeFontSize(intent.getIntExtra("Font", 20));
-            isFontHelper = true;
-        }
 
         loadElements();
         renderReceiptList();
         initBudgetLabels();
         setBudgetWarmingLabel();
+
+        if (intent.hasExtra("Font")) {
+            changeFontSize(intent.getIntExtra("Font", 20));
+            isFontHelper = true;
+        }
     }
 
     public void addReceipt(View view) {
         Intent intent = new Intent(this, AddReceiptActivity.class);
-        if (isFontHelper) intent.putExtra("Font", 20);
+        if (isFontHelper) intent.putExtra("Font", 18);
         startActivity(intent);
     }
 
@@ -217,11 +218,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void increaseFontSize(View view) {
-        changeFontSize(20);
-        isFontHelper = true;
+        if (!isFontHelper) {
+            changeFontSize(20);
+        } else {
+            changeFontSize(17);
+        }
+        isFontHelper = !isFontHelper;
     }
 
-    private void changeFontSize(int newFontSize) {
+    public void changeFontSize(int newFontSize) {
         currentSpendingsLabel.setTextSize(newFontSize);
         remainingSpendingsLabel.setTextSize(newFontSize);
         budgetLabel.setTextSize(newFontSize);

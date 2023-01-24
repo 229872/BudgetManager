@@ -59,7 +59,7 @@ public class ReceiptRepository implements Serializable {
         return receipts;
     }
 
-    private Map<String, Object> receiptToMap(Receipt r) {
+    public static Map<String, Object> receiptToMap(Receipt r) {
         Map<String, Object> receipt = new HashMap<>();
         receipt.put("shopName", r.getShopName());
         receipt.put("addedDate", r.getAddedDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -76,11 +76,16 @@ public class ReceiptRepository implements Serializable {
         return receipt;
     }
 
-    private Receipt mapToReceipt(Map<String, Object> map) {
+    public static Receipt mapToReceipt(Map<String, Object> map) {
         String shopName = (String) map.get("shopName");
         LocalDate purchaseDate = LocalDate.parse((String)map.get("purchaseDate"));
         List<Purchase> purchases = new ArrayList<>();
-        Category category = Category.OTHER;
+        Category category;
+        try {
+            category = Category.valueOf((String) map.get("category"));
+        } catch (IllegalArgumentException ignored) {
+            category = Category.OTHER;
+        }
 
         return new Receipt(shopName, purchases, purchaseDate, category);
     }

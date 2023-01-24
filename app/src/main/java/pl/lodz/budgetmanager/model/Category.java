@@ -8,20 +8,20 @@ public enum Category {
     ACCESSORY("Accessory"), COSMETIC("Cosmetic"),
     OTHER("Other");
 
-    private String cateGoryName;
+    private final String categoryName;
 
-    Category(String cateGoryName) {
-        this.cateGoryName = cateGoryName;
+    Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     @Override
     public String toString() {
-        return cateGoryName;
+        return categoryName;
     }
 
     public static Category getFromString(String category) {
         return Arrays.stream(Category.values())
-                .filter(cat -> cat.cateGoryName.equalsIgnoreCase(category))
+                .filter(cat -> cat.categoryName.equalsIgnoreCase(category))
                 .findFirst()
                 .orElse(null);
     }

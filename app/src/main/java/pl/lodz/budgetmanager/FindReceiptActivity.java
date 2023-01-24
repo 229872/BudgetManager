@@ -1,6 +1,6 @@
 package pl.lodz.budgetmanager;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static pl.lodz.budgetmanager.repository.ReceiptRepository.mapToReceipt;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.time.Month;
 import java.util.List;
@@ -31,6 +35,8 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     private ArrayAdapter<Receipt> adapter;
     private ArrayAdapter<CharSequence> categoryAdapter;
     private Category category;
+
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +74,19 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
 
     public void findByName(View view) {
         String name = filterName.getText().toString();
-        List<Receipt> newList =  receiptRepository.findAll(name);
         receipts.clear();
-        receipts.addAll(newList);
-        adapter.notifyDataSetChanged();
+        db.collection("receipts")
+                .whereEqualTo("shopName", name)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            System.out.println(doc.getId() + " => " + doc.getData());
+                            receipts.add(mapToReceipt(doc.getData()));
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     public void findByMonth(View view) {
@@ -91,10 +106,22 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     }
 
     public void findByCategory(View view) {
-        List<Receipt> newList = receiptRepository.findAll(category);
+        // FIXME finding with ACCESSORY selected crashes the app
+        String categoryName = category.name();
+        System.out.println(categoryName);
         receipts.clear();
-        receipts.addAll(newList);
-        adapter.notifyDataSetChanged();
+        db.collection("receipts")
+                .whereEqualTo("category", categoryName)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            System.out.println(doc.getId() + " => " + doc.getData());
+                            receipts.add(mapToReceipt(doc.getData()));
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     public void back(View view) {

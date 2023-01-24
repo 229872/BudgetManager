@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         setRemainingSpendingsLabel();
     }
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint({"SuspiciousIndentation", "HardwareIds"})
     private void render() {
         receiptList = findViewById(R.id.output);
         currentSpendingsLabel = findViewById(R.id.currentSpendingsLabel);
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("receipts")
+                .whereEqualTo("deviceId", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

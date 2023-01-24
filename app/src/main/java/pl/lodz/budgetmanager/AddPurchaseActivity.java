@@ -1,17 +1,15 @@
 package pl.lodz.budgetmanager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -95,10 +93,11 @@ public class AddPurchaseActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("HardwareIds")
     public void createReceipt(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         Receipt receipt = new Receipt(shopName, purchaseList, purchaseDate, category);
-        receiptRepository.add(receipt);
+        receiptRepository.add(receipt, Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         startActivity(intent);
     }
 }

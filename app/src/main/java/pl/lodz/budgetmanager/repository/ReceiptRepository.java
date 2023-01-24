@@ -27,7 +27,8 @@ public class ReceiptRepository implements Serializable {
     private static ReceiptRepository instance;
     private final String collectionName = "receipts";
 
-    private ReceiptRepository() {}
+    private ReceiptRepository() {
+    }
 
     synchronized public static ReceiptRepository getInstance() {
         if (instance == null) {
@@ -36,7 +37,7 @@ public class ReceiptRepository implements Serializable {
         return instance;
     }
 
-    public static Map<String, Object> receiptToMap(Receipt r) {
+    public static Map<String, Object> receiptToMap(Receipt r, String deviceId) {
         Map<String, Object> receipt = new HashMap<>();
         receipt.put("shopName", r.getShopName());
         receipt.put("addedDate", r.getAddedDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -44,6 +45,7 @@ public class ReceiptRepository implements Serializable {
         receipt.put("category", r.getCategory());
         receipt.put("purchases", r.getPurchases());
         receipt.put("totalPrice", r.getTotalPrice());
+        receipt.put("deviceId", deviceId);
 
         List<Map<String, Object>> purchases = new ArrayList<>();
         r.getPurchases().forEach(p -> {
@@ -56,12 +58,8 @@ public class ReceiptRepository implements Serializable {
         });
 
         receipt.put("purchases", purchases);
-//        try {
-//            receipt.put("userId", AdvertisingIdClient.getAdvertisingIdInfo(context).getId());
-//        } catch (IOException | GooglePlayServicesNotAvailableException |
-//                 GooglePlayServicesRepairableException e) {
-//            throw new RuntimeException(e);
-//        }
+
+
         return receipt;
     }
 
@@ -90,10 +88,10 @@ public class ReceiptRepository implements Serializable {
                 Math.toIntExact((Long) (map.get("quantity"))));
     }
 
-    public void add(Receipt r) {
+    public void add(Receipt r, String deviceId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(collectionName)
-                .add(receiptToMap(r))
+                .add(receiptToMap(r, deviceId))
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                     documentReference

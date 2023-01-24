@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NormalFont" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="IncreasedFont" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+    </style>
+</resources>

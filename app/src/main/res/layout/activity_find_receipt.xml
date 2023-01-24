@@ -8,7 +8,7 @@
     tools:context=".FindReceiptActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/findReceiptTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
@@ -37,10 +37,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintEnd_toStartOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="@+id/backButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/findReceiptTitle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/filterName"
@@ -66,29 +65,33 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:id="@+id/findByNameButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:onClick="findByName"
         android:text="Find by name"
         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout8"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textInputLayout8"
         app:layout_constraintTop_toTopOf="@+id/textInputLayout8" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:id="@+id/findByMonthButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:onClick="findByMonth"
         android:text="Find by month"
         app:layout_constraintBottom_toBottomOf="@+id/textInputLayout9"
-        app:layout_constraintEnd_toEndOf="@+id/button4"
-        app:layout_constraintStart_toStartOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textInputLayout9"
         app:layout_constraintTop_toTopOf="@+id/textInputLayout9" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
@@ -104,7 +107,7 @@
         android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:contentDescription="Choose category"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout9"
         app:layout_constraintHorizontal_bias="0.0"
@@ -113,14 +116,15 @@
 
     <Button
         android:id="@+id/findGenreButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:onClick="findByCategory"
         android:text="Find by category"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinner"
         app:layout_constraintTop_toTopOf="@+id/spinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

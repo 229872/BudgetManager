@@ -51,6 +51,9 @@ public class AddPurchaseActivity extends AppCompatActivity {
     private TextView purchaseStatus;
     private Button doneButton;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private Button addPurchaseButton;
+    private TextView purchaseTitle;
+
 
     @SuppressLint("HardwareIds")
     @Override
@@ -108,6 +111,18 @@ public class AddPurchaseActivity extends AppCompatActivity {
         }
         return baos.toByteArray();
     }
+    private boolean isFontHelper = false;
+
+    private void changeFontSize(int newFontSize) {
+        purchaseTitle.setTextSize(newFontSize);
+        productNameInput.setTextSize(newFontSize);
+        priceInput.setTextSize(newFontSize);
+        quantityInput.setTextSize(newFontSize);
+        addPurchaseButton.setTextSize(newFontSize);
+        doneButton.setTextSize(newFontSize);
+        purchaseStatus.setTextSize(newFontSize);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,15 +135,25 @@ public class AddPurchaseActivity extends AppCompatActivity {
         purchaseStatus = findViewById(R.id.purchaseStatus);
         doneButton = findViewById(R.id.doneButton);
         purchaseListOutput = findViewById(R.id.purchaseListOutput);
+        addPurchaseButton = findViewById(R.id.addPurchaseButton);
+        purchaseTitle = findViewById(R.id.purchaseTitle);
 
 
         Intent intent = getIntent();
+
         shopName = intent.getStringExtra("ShopName");
         purchaseDate = (LocalDate) intent.getSerializableExtra("PurchaseDate");
         category = (Category) intent.getSerializableExtra("Category");
         purchaseStatus.setVisibility(View.INVISIBLE);
         doneButton.setEnabled(false);
+
+        if (intent.hasExtra("Font")) {
+            changeFontSize(intent.getIntExtra("Font", 20));
+            isFontHelper = true;
+        }
     }
+
+
 
     public void addPurchase(View view) {
         try {
@@ -166,6 +191,8 @@ public class AddPurchaseActivity extends AppCompatActivity {
 
     @SuppressLint("HardwareIds")
     public void createReceipt(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        if (isFontHelper) intent.putExtra("Font", 20);
         // Launch the photo picker and allow the user to choose only images.
         pickMedia.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType((ActivityResultContracts.PickVisualMedia.VisualMediaType) ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)

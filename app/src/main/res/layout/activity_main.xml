@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addReceiptButton"
         android:layout_width="150dp"
         android:layout_height="70dp"
         android:layout_marginStart="20dp"
@@ -26,15 +26,15 @@
         android:layout_marginEnd="20dp"
         android:onClick="findReceipt"
         android:text="Find receipt"
-        app:layout_constraintBottom_toBottomOf="@+id/button"
+        app:layout_constraintBottom_toBottomOf="@+id/addReceiptButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/editBudgetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="132dp"
         android:onClick="editBudget"
         android:text="Edit budget"
@@ -50,7 +50,7 @@
         android:text="Budget:"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/editBudgetButton" />
 
     <TextView
         android:id="@+id/receiptsTitle"
@@ -96,7 +96,7 @@
 
     <TextView
         android:id="@+id/remainingMoneyTitle"
-        android:layout_width="85dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginEnd="30dp"
         android:text="Remaining:"
@@ -119,10 +119,10 @@
         android:id="@+id/budgetWarmingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintBottom_toBottomOf="@+id/editBudgetButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toTopOf="@+id/button3" />
+        app:layout_constraintStart_toEndOf="@+id/editBudgetButton"
+        app:layout_constraintTop_toTopOf="@+id/editBudgetButton" />
 
     <ListView
         android:id="@+id/output"
@@ -132,5 +132,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/receiptsTitle" />
+
+    <Button
+        android:id="@+id/fontButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="increaseFontSize"
+        android:text="Increase font size"
+        app:layout_constraintBottom_toTopOf="@+id/editBudgetButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

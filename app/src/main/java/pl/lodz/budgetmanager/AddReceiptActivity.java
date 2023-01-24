@@ -34,16 +34,20 @@ public class AddReceiptActivity extends AppCompatActivity implements AdapterView
     private Spinner spinner;
     private Category category;
 
+    private TextView shopNameLabel;
+    private TextView chooseCategoryLabel;
+    private TextView dateOfPurchaseLabel;
+    private boolean isFontHelper = false;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_receipt);
-        button = findViewById(R.id.addProductsButton);
-        button.setEnabled(false);
-        shopNameInput = findViewById(R.id.shopNameInput);
-        shopNameInput.addTextChangedListener(textWatcher);
-        calendarView = findViewById(R.id.calendarView);
-        spinner = findViewById(R.id.categoryInput);
+        Intent intent = getIntent();
+
+        loadElements();
 
         adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -53,6 +57,11 @@ public class AddReceiptActivity extends AppCompatActivity implements AdapterView
         calendarView.setOnDateChangeListener((calendarView, year, month, day) -> {
             date = year + "-" + (month < 10 ? "0" : "") + (month + 1) + "-" + day;
         });
+
+        if (intent.hasExtra("Font")) {
+            changeFontSize(intent.getIntExtra("Font", 20));
+            isFontHelper = true;
+        }
     }
 
     public void addProducts(View view) {
@@ -65,7 +74,28 @@ public class AddReceiptActivity extends AppCompatActivity implements AdapterView
         intent.putExtra("ShopName", shopName);
         intent.putExtra("PurchaseDate", purchaseDate);
         intent.putExtra("Category", category);
+        if (isFontHelper) intent.putExtra("Font", 20);
         startActivity(intent);
+    }
+
+    private void loadElements() {
+        button = findViewById(R.id.addProductsButton);
+        button.setEnabled(false);
+        shopNameInput = findViewById(R.id.shopNameInput);
+        shopNameInput.addTextChangedListener(textWatcher);
+        calendarView = findViewById(R.id.calendarView);
+        spinner = findViewById(R.id.categoryInput);
+        shopNameLabel = findViewById(R.id.shopNameLabel);
+        chooseCategoryLabel = findViewById(R.id.chooseCategoryLabel);
+        dateOfPurchaseLabel = findViewById(R.id.dateOfPurchaseLabel);
+    }
+
+    private void changeFontSize(int newFontSize) {
+        shopNameLabel.setTextSize(newFontSize);
+        chooseCategoryLabel.setTextSize(newFontSize);
+        dateOfPurchaseLabel.setTextSize(newFontSize);
+        shopNameInput.setTextSize(newFontSize);
+        button.setTextSize(newFontSize);
     }
 
     private final TextWatcher textWatcher = new TextWatcher() {

@@ -116,7 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="findByCategory"
-        android:text=" Find by category"
+        android:text="Find by category"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="@+id/button2"

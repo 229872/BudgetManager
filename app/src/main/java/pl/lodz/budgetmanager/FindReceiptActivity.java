@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,7 +32,7 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     private ListView list;
     private Spinner spinner;
     private ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
-    private List<Receipt> receipts;
+    private final List<Receipt> receipts = new ArrayList<>();
     private ArrayAdapter<Receipt> adapter;
     private ArrayAdapter<CharSequence> categoryAdapter;
     private Category category;
@@ -60,7 +61,6 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void renderList() {
-        receipts = receiptRepository.findAll();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1,
                 receipts);
         list.setAdapter(adapter);
@@ -106,7 +106,6 @@ public class FindReceiptActivity extends AppCompatActivity implements AdapterVie
     }
 
     public void findByCategory(View view) {
-        // FIXME finding with ACCESSORY selected crashes the app
         String categoryName = category.name();
         System.out.println(categoryName);
         receipts.clear();

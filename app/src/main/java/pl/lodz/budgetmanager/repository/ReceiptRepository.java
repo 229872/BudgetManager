@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -37,10 +36,6 @@ public class ReceiptRepository implements Serializable {
         return instance;
     }
 
-    public List<Receipt> getRepository() {
-        return receipts;
-    }
-
     public static Map<String, Object> receiptToMap(Receipt r) {
         Map<String, Object> receipt = new HashMap<>();
         receipt.put("shopName", r.getShopName());
@@ -49,6 +44,18 @@ public class ReceiptRepository implements Serializable {
         receipt.put("category", r.getCategory());
         receipt.put("purchases", r.getPurchases());
         receipt.put("totalPrice", r.getTotalPrice());
+
+        List<Map<String, Object>> purchases = new ArrayList<>();
+        r.getPurchases().forEach(p -> {
+            Map<String, Object> purchaseMap = new HashMap<>();
+            purchaseMap.put("name", p.getName());
+            purchaseMap.put("price", p.getPrice());
+            purchaseMap.put("quantity", p.getQuantity());
+
+            purchases.add(purchaseMap);
+        });
+
+        receipt.put("purchases", purchases);
 //        try {
 //            receipt.put("userId", AdvertisingIdClient.getAdvertisingIdInfo(context).getId());
 //        } catch (IOException | GooglePlayServicesNotAvailableException |
@@ -69,7 +76,18 @@ public class ReceiptRepository implements Serializable {
             category = Category.OTHER;
         }
 
+        ((ArrayList) map.get("purchases")).forEach(p -> {
+            purchases.add(mapToPurchase((HashMap<String, Object>) p));
+        });
+
         return new Receipt(id, shopName, purchases, purchaseDate, category);
+    }
+
+    private static Purchase mapToPurchase(Map<String, Object> map) {
+        return new Purchase(
+                (String) map.get("name"),
+                (Double) map.get("price"),
+                Math.toIntExact((Long) (map.get("quantity"))));
     }
 
     public void add(Receipt r) {
@@ -104,47 +122,6 @@ public class ReceiptRepository implements Serializable {
                 .delete();
     }
 
-    public Receipt get(int index) {
-        return receipts.get(index);
-    }
-
-    public Receipt find(String shopName) {
-        for (Receipt r : receipts) {
-            if (r.getShopName().equals(shopName)) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-    public Receipt find(Category category) {
-        for (Receipt r : receipts) {
-            if (r.getCategory().equals(category)) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-    public Receipt find(Month month) {
-        for (Receipt r : receipts) {
-            if (r.getPurchaseDate().getMonth().equals(month)) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-    public List<Receipt> findAll(String shopName) {
-        List<Receipt> found = new ArrayList<>();
-        for (Receipt r : receipts) {
-            if (r.getShopName().equals(shopName)) {
-                found.add(r);
-            }
-        }
-        return found;
-    }
-
     public List<Receipt> findAll(Month month) {
         List<Receipt> found = new ArrayList<>();
         for (Receipt r : receipts) {
@@ -153,42 +130,6 @@ public class ReceiptRepository implements Serializable {
             }
         }
         return found;
-    }
-
-    public List<Receipt> findAll() {
-        receipts.clear();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(collectionName)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d(TAG, document.getId() + " => " + document.getData());
-                            receipts.add(mapToReceipt(document.getId(), document.getData()));
-                        }
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                });
-        return receipts;
-    }
-
-    public List<Receipt> findAll(Category category) {
-        List<Receipt> found = new ArrayList<>();
-        for (Receipt r : receipts) {
-            if (r.getCategory().equals(category)) {
-                found.add(r);
-            }
-        }
-        return found;
-    }
-
-    public double getTotalSpendings() {
-        double spendings = 0;
-        for (Receipt r : receipts) {
-            spendings += r.getTotalPrice();
-        }
-        return spendings;
     }
 
     public double getSpendingsByMonth(Month month) {

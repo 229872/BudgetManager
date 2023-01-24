@@ -1,6 +1,7 @@
 package pl.lodz.budgetmanager;
 
 import static android.content.ContentValues.TAG;
+import static pl.lodz.budgetmanager.repository.ReceiptRepository.mapToReceipt;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -24,11 +25,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import pl.lodz.budgetmanager.model.Budget;
-import pl.lodz.budgetmanager.model.Category;
-import pl.lodz.budgetmanager.model.Purchase;
 import pl.lodz.budgetmanager.model.Receipt;
 import pl.lodz.budgetmanager.repository.ReceiptRepository;
 
@@ -115,16 +113,6 @@ public class MainActivity extends AppCompatActivity {
         setBudgetLabel();
         setCurrentSpendingsLabel();
         setRemainingSpendingsLabel();
-    }
-
-
-    private Receipt mapToReceipt(String id, Map<String, Object> map) {
-        String shopName = (String) map.get("shopName");
-        LocalDate purchaseDate = LocalDate.parse((String) map.get("purchaseDate"));
-        List<Purchase> purchases = new ArrayList<>();
-        Category category = Category.getFromString((String) map.get("category"));
-
-        return new Receipt(id, shopName, purchases, purchaseDate, category);
     }
 
     @SuppressLint("SuspiciousIndentation")

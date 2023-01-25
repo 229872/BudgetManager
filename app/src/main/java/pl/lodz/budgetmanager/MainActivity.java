@@ -63,13 +63,11 @@ public class MainActivity extends AppCompatActivity {
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         budget = Budget.getInstance(receiptRepository, deviceId);
 
+        render();
         if (intent.hasExtra("Font")) {
             changeFontSize(intent.getIntExtra("Font", 20));
             isFontHelper = true;
         }
-
-
-        render();
 
     }
 

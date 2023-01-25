@@ -1,14 +1,21 @@
 package pl.lodz.budgetmanager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -24,6 +31,7 @@ public class ReceiptInfoActivity extends AppCompatActivity {
     private ArrayAdapter<Purchase> adapter;
     private List<Purchase> purchases;
     private boolean isFontHelper = false;
+    private Receipt receipt;
 
 
     @Override
@@ -31,7 +39,7 @@ public class ReceiptInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receipt_info);
         Intent intent = getIntent();
-        Receipt receipt = (Receipt) intent.getSerializableExtra("ReceiptInfo");
+        receipt = (Receipt) intent.getSerializableExtra("ReceiptInfo");
 
         initElements();
 
@@ -60,6 +68,24 @@ public class ReceiptInfoActivity extends AppCompatActivity {
     }
 
     public void displayPhoto(View view) {
-       // TODO photo
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        storageRef.child(receipt.getId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Intent intent = new Intent(ReceiptInfoActivity.this, FullscreenActivity.class);
+                intent.putExtra("image_url", uri.toString());
+                startActivity(intent);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                System.out.println("Photo not found");
+            }
+        });
+
+
+
     }
 }
